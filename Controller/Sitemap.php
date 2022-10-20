@@ -25,6 +25,11 @@ class Sitemap extends \OxidEsales\Eshop\Application\Controller\FrontendControlle
     */
     public function render()
     {   
+	 $oConfig = oxNew("oxconfig");
+
+	#    echo '<pre>';
+	#	print_r($oConfig->getConfigParam("sShopDir"));
+	#    echo '</pre>';
 
         $articleTable = getViewName('oxarticles');
 
@@ -33,12 +38,17 @@ class Sitemap extends \OxidEsales\Eshop\Application\Controller\FrontendControlle
 	$oArticleList = oxNew( 'oxarticlelist' );
 	$oArticleList->selectString($sql);
 
+	$f1 = fopen($oConfig->getConfigParam("sShopDir")."sitemap.txt","w+");
+
 	foreach($oArticleList->getList() as $oArticle)
 	{
-	 echo ($oArticle->getLink())."\r\n";
+		 fwrite($f1, $oArticle->getLink()."\r\n");
 	}
-	
-	return $this->_sThisTemplate;
-    }
 
+	fclose($f1);
+
+	return $this->_sThisTemplate;
+    
+ 
+   }
 }
